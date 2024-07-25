@@ -69,10 +69,42 @@ class template {
             $templates[$customtemplate->lang][$customtemplate->type] = [
                 'subject' => $customtemplate->subject,
                 'body' => $customtemplate->body,
-                'status' => $customtemplate->status
+                'status' => $customtemplate->status,
+                'langcode' => $customtemplate->lang,
+                'langname' => $languages[$customtemplate->lang]
             ];
         }
 
         return $templates;
+    }
+
+    /**
+     * Changes the status of a template.
+     *
+     * This method updates the status of a template in the database based on the provided parameters.
+     *
+     * @param string $status The new status of the template ('enabled' or 'disabled').
+     * @param string $type The type of the template.
+     * @param string $lang The language of the template.
+     * @return void
+     */
+    public static function change_status($status, $type, $lang) {
+        global $DB;
+
+        $template = $DB->get_record('local_engagement_email_template', ['type' => $type, 'lang' => $lang]);
+
+        if ($template) {
+            $template->status = $status == 'enable' ? 1 : 0;
+            $DB->update_record('local_engagement_email_template', $template);
+        } else {
+            $template = new \stdClass();
+            $template->type = $type;
+            $template->lang = $lang;
+            $template->subject = get_string($type.':emailsubject', 'local_engagement_email');
+            $template->body = get_string($type.':emailbody', 'local_engagement_email');
+            $template->status = $status == 'enable' ? 1 : 0;
+
+            $DB->insert_record('local_engagement_email_template', $template);
+        }
     }
 }
