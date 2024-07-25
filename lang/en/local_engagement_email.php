@@ -36,6 +36,7 @@ $string['engagement_email_enabled'] = 'Enable engagement emails';
 $string['engagement_email_enabled_desc'] = 'Enable sending custom engagement emails based on events';
 
 $string['available_emails_header'] = 'Available engagement emails';
+$string['resetfilters'] = 'Reset filters';
 $string['eventname'] = 'Event name';
 $string['test'] = 'Test';
 
