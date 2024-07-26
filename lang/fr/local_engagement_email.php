@@ -72,6 +72,17 @@ $string['course_completed:emailbody'] = '<p>Cher [[fullname]],</p>
 <p>Et vous inscrire à d\'autres cours, consultez le catalogue <a href="[[coursecatalogurl]]">ici</a>.</p>';
 $string['get_certificate'] = '<p>Obtenez votre certificat <a href="[[certificateurl]]">ici</a>.</p>';
 
+// Form
+$string['edittemplate'] = 'Modification du modèle : "{$a->type}" ({$a->language})';
+$string['enabled'] = 'Activé';
+$string['subject'] = 'Sujet';
+$string['body'] = 'Corps';
+$string['missingsubject'] = 'Le sujet est requis';
+$string['missingbody'] = 'Le corps est requis';
+$string['template_saved'] = 'Modèle enregistré';
+$string['placeholderhelp'] = 'Visitez <a target="_blank" href="/local/engagement_email/index.php">cette page</a> pour voir la liste des champs disponibles';
+
+
 $string['privacy:metadata'] = 'Ce plugin envoie uniquement des emails. Il ne stocke aucune donnée personnelle.';
 
 

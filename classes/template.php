@@ -105,6 +105,9 @@ class template {
             $template->status = 0;
         }
 
+        $languages = get_string_manager()->get_list_of_translations(true);
+        $template->langname = $languages[$template->lang];
+
         force_current_language($oldforcelang);
 
         return $template;
@@ -126,7 +129,7 @@ class template {
         $template = self::get_template($type, $lang);
         $template->status = $status == 'enable' ? 1 : 0;
 
-        if (isset($template->id)) {
+        if (!empty($template->id)) {
             $DB->update_record('local_engagement_email_template', $template);
         } else {
             $DB->insert_record('local_engagement_email_template', $template);
