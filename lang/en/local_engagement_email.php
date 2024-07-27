@@ -32,9 +32,11 @@ $string['pluginname'] = 'Engagement emails';
 
 $string['manageemails'] = 'Manage emails';
 
+// Settings
 $string['engagement_email_enabled'] = 'Enable engagement emails';
 $string['engagement_email_enabled_desc'] = 'Enable sending custom engagement emails based on events';
 
+// Management
 $string['available_emails_header'] = 'Available engagement emails';
 $string['resetfilters'] = 'Reset filters';
 $string['eventname'] = 'Event name';
@@ -48,30 +50,30 @@ $string['course_completed'] = 'Course completed';
 
 // Default templates
 $string['user_created:emailsubject'] = 'Welcome to [[sitename]]!';
-$string['user_created:emailbody'] = '<p>Dear [[fullname]],</p>
+$string['user_created:emailbody'] = '<p>Dear [[user:fullname]],</p>
 <p>Welcome to our learning platform [[sitelink]].</p>
-<p>You can now create courses with AI. Create your first course now! [[genailink]]</p>
+<p>You can now create courses with AI. Create your first course now! [[adv:coursecreatelink]]</p>
 <p>You can also sign up for courses by other creators, see the catalogue <a href="[[coursecatalogurl]]">here</a>.</p>';
 $string['course_created:emailsubject'] = 'Course created!';
-$string['course_created:emailbody'] = '<p>Dear [[fullname]],</p>
-<p>Well done creating a new course called [[coursename]].</p>
-<p>Your course is ready to go! You can access it <a href="[[courseurl]]">here</a>.</p>
-<p>Share it with your friends/students : [[coursesharelink]]</p>
-<p>Create another course here: [[genailink]]</p>';
-$string['user_enrolment_created:emailsubject'] = 'You are now enrolled in [[coursename]]';
-$string['user_enrolment_created:emailbody'] = '<p>Dear [[fullname]],</p>
-<p>You are now enrolled in the course [[coursename]].</p>
-<p>Invite your friends to join you: [[coursesharelink]]</p>
-<p>You can also create your own courses with AI: [[genailink]]</p>
+$string['course_created:emailbody'] = '<p>Dear [[user:fullname]],</p>
+<p>Well done creating a new course called [[course:fullname]].</p>
+<p>Your course is ready to go! You can access it <a href="[[course:url]]">here</a>.</p>
+<p>Share it with your friends/students : [[adv:coursesharelink]]</p>
+<p>Create another course here: [[adv:coursecreatelink]]</p>';
+$string['user_enrolment_created:emailsubject'] = 'You are now enrolled in [[course:fullname]]';
+$string['user_enrolment_created:emailbody'] = '<p>Dear [[user:fullname]],</p>
+<p>You are now enrolled in the course [[course:fullname]].</p>
+<p>Invite your friends to join you: [[adv:coursesharelink]]</p>
+<p>You can also create your own courses with AI: [[adv:coursecreatelink]]</p>
 <p>Enjoy your course on [[sitelink]]!</p>';
-$string['course_completed:emailsubject'] = 'You have completed the course [[coursename]]!';
-$string['course_completed:emailbody'] = '<p>Dear [[fullname]],</p>
-<p>You have successfully completed [[coursename]].</p>
-<p>[[certificate_cta]]</p>
-<p>If you enjoyed this course, share it with your friends: [[coursesharelink]]</p>
-<p>You can create your own courses with AI: [[genailink]]</p>
+$string['course_completed:emailsubject'] = 'You have completed the course [[course:fullname]]!';
+$string['course_completed:emailbody'] = '<p>Dear [[user:fullname]],</p>
+<p>You have successfully completed [[course:fullname]].</p>
+<p>[[adv:certificate_cta]]</p>
+<p>If you enjoyed this course, share it with your friends: [[adv:coursesharelink]]</p>
+<p>You can create your own courses with AI: [[adv:coursecreatelink]]</p>
 <p>And sign up for further courses, see the catalogue <a href="[[coursecatalogurl]]">here</a>.</p>';
-$string['get_certificate'] = '<p>Get your certificate <a href="[[certificateurl]]">here</a>.</p>';
+$string['get_certificate'] = '<p>Get your certificate <a href="{$a}">here</a>.</p>';
 
 // Form
 $string['edittemplate'] = 'Editing template: "{$a->type}" ({$a->language})';
@@ -82,6 +84,23 @@ $string['missingsubject'] = 'Subject is required';
 $string['missingbody'] = 'Body is required';
 $string['template_saved'] = 'Template saved';
 $string['placeholderhelp'] = 'Visit <a target="_blank" href="/local/engagement_email/index.php">this page</a> to see the list of available fields';
+
+// Placeholders
+$string['availableplaceholders'] = 'Available placeholders';
+$string['globalhelp'] = 'The tables on this page show the available placeholders that can be used in the message templates.
+The values shown in this table are YOUR values as preview, they will be replaced by the recipients values when the welcome email is sent.';
+$string['welcome'] = 'Welcome';
+$string['defaultprofile'] = 'Basic user profile';
+$string['customprofile'] = 'Custom profile fields';
+$string['defaultcourse'] = 'Basic course information';
+$string['customcourse'] = 'Custom course fields';
+$string['advanced'] = 'Other fields';
+$string['fieldname'] = 'Placeholder';
+$string['yourvalue'] = 'Preview value';
+$string['resetpass'] = 'Reset your password here';
+$string['coursecatalog'] = 'Course catalogue';
+$string['createcourselink'] = '<a href="/my/">Create course</a>';
+$string['coursesharelink'] = '<a href="/my/">TODO: Share course</a>';
 
 
 $string['privacy:metadata'] = 'This plugin only sends emails. It does not store any personal data.';
