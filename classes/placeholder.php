@@ -116,6 +116,10 @@ class placeholder {
             $placeholders += self::get_advanced();
         }
 
+        // Dispatch hook to allow other plugins to add placeholders
+        $hook = new \local_engagement_email\hook\after_get_placeholders($this->user, $this->course, $placeholders, $fieldtype);
+        \core\di::get(\core\hook\manager::class)->dispatch($hook);
+
         force_current_language($oldforcelang);
 
         return $placeholders;
@@ -193,6 +197,11 @@ class placeholder {
         return $placeholders;
     }
 
+    /**
+     * Retrieves the default placeholders for a course.
+     *
+     * @return array An associative array of placeholders.
+     */
     public function get_course_default() {
         $placeholders = array();
 
@@ -222,6 +231,11 @@ class placeholder {
         return $placeholders;
     }
 
+    /**
+     * Retrieves the custom field placeholders for the course.
+     *
+     * @return array An array of custom field placeholders, where the keys are the placeholders and the values are the corresponding field values.
+     */
     public function get_course_custom() {
         $placeholders = array();
 
@@ -234,6 +248,15 @@ class placeholder {
         return $placeholders;
     }
 
+    /**
+     * Returns an array of advanced placeholders.
+     *
+     * This function generates an array of advanced placeholders that can be used in email templates.
+     * The placeholders include the current date, current time, current date and time, course create link,
+     * course share link, and a placeholder for a certificate call-to-action.
+     *
+     * @return array An array of advanced placeholders.
+     */
     public function get_advanced() {
         $placeholders = array();
 
