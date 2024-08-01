@@ -87,7 +87,7 @@ class template {
      *
      * @param string $type The type of the template.
      * @param string $lang The language of the template.
-     * @return stdClass The template object.
+     * @return \stdClass The template object.
      */
     public static function get_template($type, $lang) {
         global $DB;

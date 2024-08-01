@@ -76,6 +76,8 @@ class message {
     public function send($user = null, $sender = null, $course = null) {
         global $CFG, $USER, $COURSE;
 
+        $context = \context_system::instance();
+
         if (empty($user)) {
             $user = $USER;
         }
@@ -89,14 +91,23 @@ class message {
         }
 
         $this->template->subject = $this->replace_values($this->template->subject, $user, $course);
-        $this->template->body = $this->replace_values($this->template->body, $user, $course);
+        $body = $this->replace_values($this->template->body, $user, $course);
+        $body = file_rewrite_pluginfile_urls($body, 'pluginfile.php', $context->id, 'local_engagement_email', 'body', 0);
+
+        $options = [
+            'overflowdiv' => true,
+            'noclean' => true,
+            'para' => false,
+            'context' => $context
+        ];
+        $body = format_text($body, FORMAT_HTML, $options);
 
         email_to_user(
             $user,
             $sender,
             $this->template->subject,
-            html_to_text($this->template->body),
-            $this->template->body
+            html_to_text($body),
+            $body
         );
     }
 }
