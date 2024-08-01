@@ -21,12 +21,24 @@ The Engagement Email Plugin allows administrators to send custom engagement emai
 2. Click on "Manage emails" to view and edit the available email templates.
 3. Use the form to add or edit the subject and body of the emails. You can use placeholders to personalize the emails.
 
+### Default subject and body
+The default subject and body for the new templates are provided with language strings
+
+- `user_created:emailsubject`           -> `user_created:emailbody`
+- `course_created:emailsubject`         -> `course_created:emailbody`
+- `user_enrolment_created:emailsubject` -> `user_enrolment_created:emailbody`
+- `course_completed:emailsubject`       -> `course_completed:emailbody`
+
+You could edit the language strings but once a template is modified from the UI in any way (including enabling/disabling the template) these fields are stored in the database. You can always edit these fields using the editor.
+
 ### Sending Test Emails
 
-To send a test email from the UI, add the `test` parameter to the URL when editing an email template. For example:
-/admin/settings.php?section=local_engagement_email&test=1
+Real emails will not be sent if the plugin or the template for that event and language is disabled.
 
-This will allow you to send a test email to verify the template's content and formatting.
+To send test emails immediately from the UI (ignoring if the plugin or template is disabled), add the `test` parameter to the URL when editing an email template. For example:
+`/admin/settings.php?section=local_engagement_email&test=1`
+
+This will allow you to send a test email to verify the template's content and formatting. The test emails are sent to the account you are logged in into. Also if you use any user or course placeholders your user and the main course (the site itself) are used to populate the placeholders. The intention of these emails is to test the content and structure of the email.
 
 ## Supported Events
 
@@ -37,11 +49,15 @@ The plugin supports the following events:
 - User enrolment created
 - Course completed
 
+These events provide the necessary context about the user and course involved in the action. This is all handled by core Moodle.
+
 ## Placeholders
 
 You can use placeholders in your email templates:
 
-Visit /local/engagement_email/index.php to see the list of available fields
+Visit `/local/engagement_email/index.php` to see the list of available fields
+
+So for example to use the Course URL in your template you can use: `[[course:url]]`
 
 ## Contact
 
