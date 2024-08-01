@@ -31,6 +31,6 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->version  = 2024072500;
-$plugin->requires = 2024042201;
+$plugin->requires = 2023100905;
 $plugin->maturity = MATURITY_ALPHA;
 $plugin->component = 'local_engagement_email';

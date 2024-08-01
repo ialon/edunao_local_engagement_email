@@ -32,6 +32,7 @@ namespace local_engagement_email;
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once($CFG->libdir .'/filelib.php');
 
 class message {
     public $template;

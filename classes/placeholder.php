@@ -117,8 +117,10 @@ class placeholder {
         }
 
         // Dispatch hook to allow other plugins to add placeholders
-        $hook = new \local_engagement_email\hook\after_get_placeholders($this->user, $this->course, $placeholders, $fieldtype);
-        \core\di::get(\core\hook\manager::class)->dispatch($hook);
+        if (!PHPUNIT_TEST) {
+            $hook = new \local_engagement_email\hook\after_get_placeholders($this->user, $this->course, $placeholders, $fieldtype);
+            \core\hook\manager::get_instance()->dispatch($hook);
+        }
 
         force_current_language($oldforcelang);
 
