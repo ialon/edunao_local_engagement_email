@@ -34,6 +34,8 @@ $string['manageemails'] = 'Gérer les emails';
 // Settings
 $string['engagement_email_enabled'] = 'Activer les emails d\'engagement';
 $string['engagement_email_enabled_desc'] = 'Activer l\'envoi d\'emails d\'engagement personnalisés basés sur des événements';
+$string['senderaddress'] = 'Adresse de l\'expéditeur';
+$string['senderaddress_desc'] = 'Compte à utiliser comme expéditeur pour les emails d\'engagement';
 
 // Management
 $string['available_emails_header'] = 'Emails d\'engagement disponibles';

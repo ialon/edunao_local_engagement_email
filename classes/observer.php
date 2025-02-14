@@ -39,7 +39,7 @@ class observer {
      * @param \core\event\base $event
      */
     public static function prepare_email(\core\event\base $event) {
-        global $CFG, $SITE;
+        global $CFG, $DB, $SITE;
 
         $eventname = get_class($event);
 
@@ -65,12 +65,6 @@ class observer {
             $user = \core_user::get_user($eventdata['objectid']);
         }
 
-        // Sender can be false when unit tests are running.
-        $sender = get_admin();
-        if ($sender === false) {
-            return;
-        }
-
         // Extract the course from the event data
         switch ($eventname) {
             case 'course_created':
@@ -84,6 +78,8 @@ class observer {
 
         if (!empty($user->email)) {
             $config = get_config('local_engagement_email');
+
+            $sender = $DB->get_record('user', array('email' => $config->senderaddress, 'deleted' => 0));
 
             // The plugin is disabled
             if (!$config->engagement_email_enabled) {

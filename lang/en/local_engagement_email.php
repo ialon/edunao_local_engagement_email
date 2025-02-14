@@ -35,6 +35,8 @@ $string['manageemails'] = 'Manage emails';
 // Settings
 $string['engagement_email_enabled'] = 'Enable engagement emails';
 $string['engagement_email_enabled_desc'] = 'Enable sending custom engagement emails based on events';
+$string['senderaddress'] = 'Sender account';
+$string['senderaddress_desc'] = 'Account to use as sender for the engagement emails';
 
 // Management
 $string['available_emails_header'] = 'Available engagement emails';
