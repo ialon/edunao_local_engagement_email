@@ -90,9 +90,14 @@ class observer {
                 return;
             }
 
+            // Template in the users language
             $template = \local_engagement_email\template::get_template($eventname, $user->lang);
 
-            // The template for this event and language is not enabled
+            // Fallback to the site language
+            if ($template->status == 0 && $CFG->lang !== $user->lang) {
+                $template = \local_engagement_email\template::get_template($eventname, $CFG->lang);
+            }
+
             if ($template->status == 0) {
                 return;
             }
