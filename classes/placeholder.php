@@ -266,9 +266,39 @@ class placeholder {
 
         $placeholders['[[adv:coursecreatelink]]'] = get_string('createcourselink', 'local_engagement_email');
         $placeholders['[[adv:coursesharelink]]'] = get_string('coursesharelink', 'local_engagement_email');
-        $placeholders['[[adv:certificate_cta]]'] = 'TODO certificate CTA';
+        $placeholders['[[adv:certificate_cta]]'] = self::get_certificate_cta();
 
         return $placeholders;
+    }
+
+    /**
+     * Returns a call-to-action link for a certificate.
+     *
+     * @return string A call-to-action link for a certificate.
+     */
+    public function get_certificate_cta() {
+        $mods = array();
+
+        $courseinfo = new \course_modinfo($this->course, $this->user->id);
+
+        if ($certificates = $courseinfo->get_instances_of('customcert')) {
+            foreach ($certificates as $cert) {
+                if ($cert->uservisible) {
+                    $mods[] = $cert;
+                }
+            }
+        }
+
+        if (empty($mods)) {
+            return '';
+        } 
+
+        $mod = reset($mods);
+        $link = new \moodle_url('/mod/customcert/view.php?id=' . $mod->id . '&downloadown=1');
+
+        $certificatecta = get_string('get_certificate', 'local_engagement_email', $link);
+
+        return $certificatecta;
     }
 
     /**
