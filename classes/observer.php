@@ -55,12 +55,10 @@ class observer {
         }
 
         $eventdata = $event->get_data();
-
         $user = \core_user::get_user($eventdata['objectid']);
 
-        $sender = get_admin();
-
         // Sender can be false when unit tests are running.
+        $sender = get_admin();
         if ($sender === false) {
             return;
         }
@@ -68,12 +66,20 @@ class observer {
         if (!empty($user->email)) {
             $config = get_config('local_engagement_email');
 
+            // The plugin is disabled
             if ($config->disabled) {
                 return;
             }
 
-            // TODO: send email to user
+            $template = \local_engagement_email\template::get_template($eventname, $user->lang);
+
+            // The template for this event and language is not enabled
+            if ($template->status == 0) {
+                return;
+            }
+
+            $message = new \local_engagement_email\message($template);
+            $message->send($user, $sender);
         }
     }
 }
-
