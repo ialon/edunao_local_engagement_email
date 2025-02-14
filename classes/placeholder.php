@@ -27,6 +27,9 @@
 
 namespace local_engagement_email;
 
+use \tool_certificate\template;
+use \mod_coursecertificate\helper;
+
 defined('MOODLE_INTERNAL') || die;
 
 global $CFG;
@@ -267,10 +270,30 @@ class placeholder {
         $placeholders['[[adv:currentdatetime]]'] = date('Y-m-d H:i:s');
 
         $placeholders['[[adv:coursecreatelink]]'] = get_string('createcourselink', 'local_engagement_email');
-        $placeholders['[[adv:coursesharelink]]'] = get_string('coursesharelink', 'local_engagement_email');
+        $placeholders['[[adv:coursesharelink]]'] = self::get_courseshare_link();
         $placeholders['[[adv:certificate_cta]]'] = self::get_certificate_cta();
 
         return $placeholders;
+    }
+
+    /**
+     * Returns a link to a course.
+     *
+     * @return string An html link to a course.
+     */
+    public function get_courseshare_link() {
+        global $DB;
+
+        // Default to course view page
+        $link = new \moodle_url('/course/view.php', array('id' => $this->course->id));
+
+        // If sharecourse is installed use the helper to generate a link
+        if (class_exists('\local_sharecourse\sharecourse_helper')) {
+            $sharecoursehelper = new \local_sharecourse\sharecourse_helper($DB);
+            $link = $sharecoursehelper->get_sharecourse_url($this->course->id);
+        }
+
+        return $link;
     }
 
     /**
@@ -279,26 +302,26 @@ class placeholder {
      * @return string A call-to-action link for a certificate.
      */
     public function get_certificate_cta() {
-        $mods = array();
+        global $DB;
+
+        $certificatecta = '';
 
         $courseinfo = new \course_modinfo($this->course, $this->user->id);
+        $mods = $courseinfo->get_instances_of('coursecertificate');
 
-        if ($certificates = $courseinfo->get_instances_of('customcert')) {
-            foreach ($certificates as $cert) {
-                if ($cert->uservisible) {
-                    $mods[] = $cert;
+        foreach ($mods as $modinfo) {
+            if ($modinfo->get_user_visible()) {
+                $certificate = $DB->get_record('coursecertificate', ['id' => $modinfo->instance], '*', MUST_EXIST);
+                helper::issue_certificate($this->user, $certificate, $this->course);
+                $issue = helper::get_user_certificate($this->user->id, $this->course->id, $certificate->template);
+
+                if ($issue) {
+                    $link = template::view_url($issue->code);
+                    $certificatecta = get_string('get_certificate', 'local_engagement_email', $link);
+                    break;
                 }
             }
         }
-
-        if (empty($mods)) {
-            return '';
-        } 
-
-        $mod = reset($mods);
-        $link = new \moodle_url('/mod/customcert/view.php?id=' . $mod->id . '&downloadown=1');
-
-        $certificatecta = get_string('get_certificate', 'local_engagement_email', $link);
 
         return $certificatecta;
     }

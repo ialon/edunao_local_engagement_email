@@ -101,7 +101,7 @@ $string['yourvalue'] = 'Valeur de prévisualisation';
 $string['resetpass'] = 'Réinitialisez votre mot de passe ici';
 $string['coursecatalog'] = 'Catalogue de cours';
 $string['createcourselink'] = '<a href="/my/">Créer un cours</a>';
-$string['coursesharelink'] = '<a href="/my/">TODO: Créer un cours</a>';
+$string['coursesharelink'] = '<a href="{$a->courseurl}">{$a->courseurl}</a>';
 
 
 $string['privacy:metadata'] = 'Ce plugin envoie uniquement des emails. Il ne stocke aucune donnée personnelle.';
