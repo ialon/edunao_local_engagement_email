@@ -258,10 +258,9 @@ class events_test extends \advanced_testcase {
         $expected->subject = 'You have completed the course ' . $course->fullname . '!';
         $expected->body1 = '<p>Dear ' . fullname($this->user) . ',</p>';
         $expected->body2 = '<p>You have successfully completed ' . $course->fullname . '.</p>';
-        $expected->body3 = '<p>TODO certificate CTA</p>';
-        $expected->body4 = '<p>If you enjoyed this course, share it with your friends: <a href="/my/">TODO: Share course</a></p>';
-        $expected->body5 = '<p>You can create your own courses with AI: <a href="/my/">Create course</a></p>';
-        $expected->body6 = '<p>And sign up for further courses, see the catalogue <a href="' . $coursecatalog . '">here</a>.</p>';
+        $expected->body3 = '<p>If you enjoyed this course, share it with your friends: <a href="/my/">TODO: Share course</a></p>';
+        $expected->body4 = '<p>You can create your own courses with AI: <a href="/my/">Create course</a></p>';
+        $expected->body5 = '<p>And sign up for further courses, see the catalogue <a href="' . $coursecatalog . '">here</a>.</p>';
 
         $this->assertSame($expected->subject, $result[0]->subject);
         $this->assertStringContainsString($expected->body1, quoted_printable_decode($result[0]->body));
@@ -269,7 +268,6 @@ class events_test extends \advanced_testcase {
         $this->assertStringContainsString($expected->body3, quoted_printable_decode($result[0]->body));
         $this->assertStringContainsString($expected->body4, quoted_printable_decode($result[0]->body));
         $this->assertStringContainsString($expected->body5, quoted_printable_decode($result[0]->body));
-        $this->assertStringContainsString($expected->body6, quoted_printable_decode($result[0]->body));
         $this->assertSame($this->user->email, $result[0]->to);
     }
 }
