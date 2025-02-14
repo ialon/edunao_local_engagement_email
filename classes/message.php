@@ -32,116 +32,38 @@ namespace local_engagement_email;
 
 defined('MOODLE_INTERNAL') || die();
 
-global $CFG;
-require_once($CFG->dirroot . '/user/profile/lib.php');
-require_once($CFG->dirroot . '/user/lib.php');
 
 class message {
-
     public $template;
-    public $defaultfields;
-    public $welcomefields;
-    public $welcomevalues;
-    public $customfields;
 
     public function __construct($template) {
         $this->template = $template;
-
-        $this->defaultfields = $this->get_default_fields();
-        $this->welcomefields = $this->get_welcome_fields();
-        $this->welcomevalues = $this->get_welcome_values();
-        $this->customfields = $this->get_custom_fields();
     }
 
+    /**
+     * Replaces the placeholders in the given text with corresponding values.
+     *
+     * @param string $text The text containing the placeholders.
+     * @param object $user The user object.
+     * @param object $course The course object.
+     * @return string The text with replaced placeholders.
+     */
+    public function replace_values($text, $user, $course) {
+        $placeholders = new placeholder($user, $course);
 
-    private function get_default_fields() {
-        $defaultfields = array('username', 'fullname', 'firstname', 'lastname', 'email',
-            'address', 'phone1', 'phone2', 'icq', 'skype', 'yahoo', 'aim', 'msn', 'department',
-            'institution', 'interests', 'idnumber', 'lang', 'timezone', 'description',
-            'city', 'url', 'country'
-        );
-
-        return $defaultfields;
-    }
-
-    private function get_welcome_fields() {
-        $welcomefields = array('sitelink', 'sitename', 'resetpasswordlink');
-
-        return $welcomefields;
-    }
-
-    private function get_custom_fields() {
-        $customfields = profile_get_custom_fields(true);
-        $returnfields = array();
-        foreach ($customfields as $field) {
-            $returnfields[] = $field->shortname;
-        }
-        return $returnfields;
-    }
-
-    public function get_user_default_values($user) {
-        $values = array();
-        foreach ($this->defaultfields as $field) {
-            if (isset($user->$field)) {
-                $values[$field] = $user->$field;
-            } else {
-                $values[$field] = '';
+        foreach($placeholders->get_placeholders('all') as $placeholder => $value) {
+            if (!str_contains($text, '[[')) {
+                break;
             }
-            if ($field == 'fullname') {
-                $values[$field] = fullname($user);
+
+            if (empty($value)) {
+                $value = '';
             }
-            if (!empty($user->$field) && $field == 'country') {
-                $values[$field]  = get_string($user->country, 'countries');
-            }
-        }
-        return $values;
-    }
 
-    public function get_user_custom_values($user) {
-        $userinfo = profile_user_record($user->id);
-        $values = array();
-        foreach ($this->customfields as $field) {
-            $fieldname = $field;
-            if (isset($userinfo->$fieldname)) {
-                $values[$field] = $userinfo->$fieldname;
-            } else {
-                $values[$field] = '';
-            }
-        }
-        return $values;
-    }
-
-    public function get_welcome_values() {
-        global $SITE;
-
-        $values = array();
-        $sitelink = \html_writer::link(new \moodle_url('/'), $SITE->fullname);
-        $sitename = $SITE->fullname;
-        $resetpasswordlink = \html_writer::link(
-            new \moodle_url('/login/forgot_password.php'), get_string('resetpass', 'local_welcome'));
-        foreach ($this->welcomefields as $field) {
-            $values[$field] = $$field;
-        }
-        return $values;
-    }
-
-    public function replace_values($user, $message) {
-        $cususervars = $this->get_user_custom_values($user);
-        $defuservars = $this->get_user_default_values($user);
-
-        foreach ($this->defaultfields as $field) {
-            $message = str_replace('[['.$field.']]', $defuservars[$field], $message);
+            $text = str_replace($placeholder, $value, $text);
         }
 
-        foreach ($this->customfields as $field) {
-            $message = str_replace('[['.$field.']]', $cususervars[$field], $message);
-        }
-
-        foreach ($this->welcomefields as $field) {
-            $message = str_replace('[['.$field.']]', $this->welcomevalues[$field], $message);
-        }
-        return $message;
-
+        return $text;
     }
 
     /**
@@ -151,8 +73,8 @@ class message {
      * @param object|null $sender The sender of the email. If null, the noreply user will be used.
      * @return void
      */
-    public function send($user = null, $sender = null) {
-        global $CFG, $USER;
+    public function send($user = null, $sender = null, $course = null) {
+        global $CFG, $USER, $COURSE;
 
         if (empty($user)) {
             $user = $USER;
@@ -161,6 +83,13 @@ class message {
         if (empty($sender)) {
             $sender = \core_user::get_noreply_user();
         }
+
+        if (empty($course)) {
+            $course = $COURSE;
+        }
+
+        $this->template->subject = $this->replace_values($this->template->subject, $user, $course);
+        $this->template->body = $this->replace_values($this->template->body, $user, $course);
 
         email_to_user(
             $user,

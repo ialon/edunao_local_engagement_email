@@ -31,46 +31,48 @@ $string['pluginname'] = 'Emails d\'engagement';
 
 $string['manageemails'] = 'Gérer les emails';
 
+// Settings
 $string['engagement_email_enabled'] = 'Activer les emails d\'engagement';
 $string['engagement_email_enabled_desc'] = 'Activer l\'envoi d\'emails d\'engagement personnalisés basés sur des événements';
 
+// Management
 $string['available_emails_header'] = 'Emails d\'engagement disponibles';
 $string['resetfilters'] = 'Réinitialiser les filtres';
 $string['eventname'] = 'Nom de l\'événement';
 $string['test'] = 'Test';
 
-// Événements pris en charge
+// Supported events
 $string['user_created'] = 'Utilisateur créé';
 $string['course_created'] = 'Cours créé';
 $string['user_enrolment_created'] = 'Inscription de l\'utilisateur créée';
 $string['course_completed'] = 'Cours terminé';
 
-// Modèles par défaut
-$string['user_created:emailsubject'] = 'Bienvenue sur [[sitename]] !';
-$string['user_created:emailbody'] = '<p>Cher [[fullname]],</p>
+// Default templates
+$string['user_created:emailsubject'] = 'Bienvenue sur [[sitename]]!';
+$string['user_created:emailbody'] = '<p>Cher [[user:fullname]],</p>
 <p>Bienvenue sur notre plateforme d\'apprentissage [[sitelink]].</p>
-<p>Vous pouvez maintenant créer des cours avec l\'IA. Créez votre premier cours maintenant ! [[genailink]]</p>
+<p>Vous pouvez maintenant créer des cours avec l\'IA. Créez votre premier cours maintenant! [[adv:coursecreatelink]]</p>
 <p>Vous pouvez également vous inscrire à des cours créés par d\'autres utilisateurs, consultez le catalogue <a href="[[coursecatalogurl]]">ici</a>.</p>';
-$string['course_created:emailsubject'] = 'Cours créé !';
-$string['course_created:emailbody'] = '<p>Cher [[fullname]],</p>
-<p>Félicitations pour la création d\'un nouveau cours appelé [[coursename]].</p>
-<p>Votre cours est prêt à être utilisé ! Vous pouvez y accéder <a href="[[courseurl]]">ici</a>.</p>
-<p>Partagez-le avec vos amis/étudiants : [[coursesharelink]]</p>
-<p>Créez un autre cours ici : [[genailink]]</p>';
-$string['user_enrolment_created:emailsubject'] = 'Vous êtes maintenant inscrit à [[coursename]]';
-$string['user_enrolment_created:emailbody'] = '<p>Cher [[fullname]],</p>
-<p>Vous êtes maintenant inscrit au cours [[coursename]].</p>
-<p>Invitez vos amis à vous rejoindre : [[coursesharelink]]</p>
-<p>Vous pouvez également créer vos propres cours avec l\'IA : [[genailink]]</p>
+$string['course_created:emailsubject'] = 'Cours créé!';
+$string['course_created:emailbody'] = '<p>Cher [[user:fullname]],</p>
+<p>Félicitations pour la création d\'un nouveau cours appelé [[course:fullname]].</p>
+<p>Votre cours est prêt à être utilisé! Vous pouvez y accéder <a href="[[course:url]]">ici</a>.</p>
+<p>Partagez-le avec vos amis/étudiants : [[adv:coursesharelink]]</p>
+<p>Créez un autre cours ici : [[adv:coursecreatelink]]</p>';
+$string['user_enrolment_created:emailsubject'] = 'Vous êtes maintenant inscrit à [[course:fullname]]';
+$string['user_enrolment_created:emailbody'] = '<p>Cher [[user:fullname]],</p>
+<p>Vous êtes maintenant inscrit au cours [[course:fullname]].</p>
+<p>Invitez vos amis à vous rejoindre : [[adv:coursesharelink]]</p>
+<p>Vous pouvez également créer vos propres cours avec l\'IA : [[adv:coursecreatelink]]</p>
 <p>Profitez de votre cours sur [[sitelink]]!</p>';
-$string['course_completed:emailsubject'] = 'Vous avez terminé le cours [[coursename]] !';
-$string['course_completed:emailbody'] = '<p>Cher [[fullname]],</p>
-<p>Vous avez terminé avec succès [[coursename]].</p>
-<p>[[certificate_cta]]</p>
-<p>Si vous avez apprécié ce cours, partagez-le avec vos amis : [[coursesharelink]]</p>
-<p>Vous pouvez créer vos propres cours avec l\'IA : [[genailink]]</p>
+$string['course_completed:emailsubject'] = 'Vous avez terminé le cours [[course:fullname]]!';
+$string['course_completed:emailbody'] = '<p>Cher [[user:fullname]],</p>
+<p>Vous avez terminé avec succès le cours [[course:fullname]].</p>
+<p>[[adv:certificate_cta]]</p>
+<p>Si vous avez apprécié ce cours, partagez-le avec vos amis : [[adv:coursesharelink]]</p>
+<p>Vous pouvez créer vos propres cours avec l\'IA : [[adv:coursecreatelink]]</p>
 <p>Et vous inscrire à d\'autres cours, consultez le catalogue <a href="[[coursecatalogurl]]">ici</a>.</p>';
-$string['get_certificate'] = '<p>Obtenez votre certificat <a href="[[certificateurl]]">ici</a>.</p>';
+$string['get_certificate'] = '<p>Obtenez votre certificat <a href="{$a}">ici</a>.</p>';
 
 // Form
 $string['edittemplate'] = 'Modification du modèle : "{$a->type}" ({$a->language})';
@@ -81,6 +83,23 @@ $string['missingsubject'] = 'Le sujet est requis';
 $string['missingbody'] = 'Le corps est requis';
 $string['template_saved'] = 'Modèle enregistré';
 $string['placeholderhelp'] = 'Visitez <a target="_blank" href="/local/engagement_email/index.php">cette page</a> pour voir la liste des champs disponibles';
+
+// Placeholders
+$string['availableplaceholders'] = 'Emplacements disponibles';
+$string['globalhelp'] = 'Les tableaux de cette page montrent les emplacements disponibles qui peuvent être utilisés dans les modèles de message.
+Les valeurs affichées dans ce tableau sont VOS valeurs en tant que prévisualisation, elles seront remplacées par les valeurs des destinataires lorsque l\'email de bienvenue sera envoyé.';
+$string['welcome'] = 'Bienvenue';
+$string['defaultprofile'] = 'Profil utilisateur de base';
+$string['customprofile'] = 'Champs de profil personnalisés';
+$string['defaultcourse'] = 'Informations de base sur le cours';
+$string['customcourse'] = 'Champs de cours personnalisés';
+$string['advanced'] = 'Autres champs';
+$string['fieldname'] = 'Emplacement';
+$string['yourvalue'] = 'Valeur de prévisualisation';
+$string['resetpass'] = 'Réinitialisez votre mot de passe ici';
+$string['coursecatalog'] = 'Catalogue de cours';
+$string['createcourselink'] = '<a href="/my/">Créer un cours</a>';
+$string['coursesharelink'] = '<a href="/my/">TODO: Créer un cours</a>';
 
 
 $string['privacy:metadata'] = 'Ce plugin envoie uniquement des emails. Il ne stocke aucune donnée personnelle.';
