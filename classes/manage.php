@@ -80,12 +80,21 @@ class manage extends \admin_setting {
      * @return string
      */
     public function output_html($data, $query='') {
-        global $CFG, $OUTPUT, $DB, $PAGE;
+        global $CFG, $OUTPUT, $PAGE;
+
+        // Optional parameter for filtering by language
+        $langfilter = optional_param('language', '', PARAM_ALPHANUMEXT);
+
+        // Optional paramter for filtering by email type
+        $typefilter = optional_param('type', '', PARAM_ALPHANUMEXT);
 
         // Optional parameter for testing
         $test = optional_param('test', 0, PARAM_INT);
 
+        $url = new \moodle_url($PAGE->url, array('test'=>$test, 'language'=>$langfilter, 'type'=>$typefilter));
+
         // Display strings
+        $strreset     = get_string('resetfilters', 'local_engagement_email');
         $strname      = get_string('eventname', 'local_engagement_email');
         $strlang      = get_string('language');
         $strenable    = get_string('enable');
@@ -94,6 +103,13 @@ class manage extends \admin_setting {
         $strtest      = get_string('test', 'local_engagement_email');
 
         $return = $OUTPUT->heading(get_string('available_emails_header', 'local_engagement_email'), 3, 'main', true);
+
+        if ($langfilter || $typefilter) {
+            $clearfiltersurl = new \moodle_url($url);
+            $clearfiltersurl->remove_params(['language', 'type']);
+            $return .= \html_writer::link($clearfiltersurl, $strreset);
+        }
+
         $return .= $OUTPUT->box_start('generalbox engagementemailsui');
 
         $table = new \html_table();
@@ -110,39 +126,58 @@ class manage extends \admin_setting {
 
         // Iterate through email templates and add to the display table.
         $templates = template::get_templates();
-        $url = new \moodle_url('/local/engagement_email/status.php', array('sesskey'=>sesskey()));
+        $statusurl = new \moodle_url('/local/engagement_email/status.php', array('sesskey'=>sesskey()));
 
         foreach ($templates as $lang => $types) {
+            // Filter by language
+            if ($langfilter && $lang != $langfilter) {
+                continue;
+            }
+
             foreach ($types as $type => $template) {
-                $name = get_string($type, 'local_engagement_email');
+                // Filter by email type
+                if ($typefilter && $type != $typefilter) {
+                    continue;
+                }
+
+                // Email type filter link
+                $typeurl = new \moodle_url($url, array('type'=>$type));
+                $typeurl->remove_params('language');
+                $strtype = get_string($type, 'local_engagement_email');
+                $typehtml = \html_writer::link($typeurl, $strtype);
+
+                // Language filter link
+                $langurl = new \moodle_url($url, array('language'=>$lang));
+                $langurl->remove_params('type');
+                $languagehtml = \html_writer::link($langurl, $template['langname']);
 
                 // Hide/show links
                 $class = '';
                 if ($template['status']) {
-                    $aurl = new \moodle_url($url, array('action'=>'disable', 'type'=>$type, 'lang'=>$lang));
+                    $aurl = new \moodle_url($statusurl, array('action'=>'disable', 'type'=>$type, 'language'=>$lang));
                     $hideshow = "<a href=\"$aurl\">";
                     $hideshow .= $OUTPUT->pix_icon('t/hide', $strdisable) . '</a>';
                     $enabled = true;
-                    $displayname = $name;
+                    $displayname = $strtype;
                 } else {
-                    $aurl = new \moodle_url($url, array('action'=>'enable', 'type'=>$type, 'lang'=>$lang));
+                    $aurl = new \moodle_url($statusurl, array('action'=>'enable', 'type'=>$type, 'language'=>$lang));
                     $hideshow = "<a href=\"$aurl\">";
                     $hideshow .= $OUTPUT->pix_icon('t/show', $strenable) . '</a>';
                     $enabled = false;
-                    $displayname = $name;
+                    $displayname = $strtype;
                     $class = 'dimmed_text';
                 }
     
                 // Add edit link
-                $editurl = new \moodle_url('/local/engagement_email/edit.php', array('type'=>$type, 'lang'=>$lang));
+                $editurl = new \moodle_url('/local/engagement_email/edit.php', array('type'=>$type, 'language'=>$lang));
                 $edithtml = "<a href=\"$editurl\">";
                 $edithtml .= $OUTPUT->pix_icon('t/edit', $stredit) . '</a>';
 
-                $rowcontent = array($name, $template['langname'], $hideshow, $edithtml);
+                $rowcontent = array($typehtml, $languagehtml, $hideshow, $edithtml);
     
                 // Add test link
                 if ($test) {
-                    $testurl = new \moodle_url('/local/engagement_email/test.php', array('type'=>$type, 'lang'=>$lang));
+                    $testurl = new \moodle_url('/local/engagement_email/test.php', array('type'=>$type, 'language'=>$lang));
                     $testhtml = "<a href=\"$testurl\">";
                     $testhtml .= $OUTPUT->pix_icon('t/email', $strtest) . '</a>';
                     $rowcontent[] = $testhtml;
