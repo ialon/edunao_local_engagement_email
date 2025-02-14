@@ -38,17 +38,17 @@ class edit_form extends \moodleform {
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
 
-        $type = $this->_customdata['type'];
+        $type = $this->_customdata['template']->type;
         $mform->addElement('hidden', 'type');
         $mform->setType('type', PARAM_ALPHANUMEXT);
 
-        $lang = $this->_customdata['lang'];
+        $lang = $this->_customdata['template']->lang;
         $mform->addElement('hidden', 'language');
         $mform->setType('language', PARAM_ALPHANUMEXT);
         $mform->setDefault('language', $lang);
 
         $typename = get_string($type, 'local_engagement_email');
-        $langname = $this->_customdata['langname'];
+        $langname = $this->_customdata['template']->langname;
         $mform->addElement('header', 'general', get_string('edittemplate', 'local_engagement_email', ['type' => $typename, 'language' => $langname]));
         
         $mform->addElement('checkbox', 'status', get_string('enabled', 'local_engagement_email'), ' ');
@@ -59,9 +59,10 @@ class edit_form extends \moodleform {
         $mform->addRule('subject', get_string('missingsubject', 'local_engagement_email'), 'required', null, 'client');
         $mform->setType('subject', PARAM_TEXT); 
 
-        $mform->addElement('editor', 'body_editor', get_string('body', 'local_engagement_email'));
+        $editoroptions = $this->_customdata['editoroptions'];
+        $mform->addElement('editor', 'body_editor', get_string('body', 'local_engagement_email'), null, $editoroptions);
         $mform->addRule('body_editor', get_string('missingbody', 'local_engagement_email'), 'required', null, 'client');
-        $mform->setType('body_editor', PARAM_CLEANHTML);
+        $mform->setType('body_editor', PARAM_RAW);
 
         $mform->addElement('static', 'placeholderhelp', '', get_string('placeholderhelp', 'local_engagement_email'));
 

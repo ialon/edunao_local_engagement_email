@@ -24,6 +24,7 @@
 namespace local_engagement_email;
 
 require_once('../../config.php');
+require_once($CFG->libdir.'/formslib.php');
 
 $context = \context_system::instance();
 
@@ -43,16 +44,42 @@ $PAGE->set_title(get_string('pluginname', 'local_engagement_email'));
 $PAGE->navbar->add(get_string('pluginname', 'local_engagement_email'));
 
 $template = \local_engagement_email\template::get_template($type, $lang);
+$template->bodyformat = FORMAT_HTML;
+
+// Prepare editor
+$editoroptions = array(
+    'maxbytes' => $CFG->maxbytes,
+    'maxfiles' => EDITOR_UNLIMITED_FILES,
+    'changeformat' => 0,
+    'context' => $context,
+    'noclean' => true,
+    'trusttext' => false
+);
+
+if (!empty($template->id)) {
+    $template = file_prepare_standard_editor($template, 'body', $editoroptions, $context, 'local_engagement_email', 'body', 0);
+} else {
+    $template = file_prepare_standard_editor($template, 'body', $editoroptions, $context, 'local_engagement_email', 'body', null);
+}
 
 $returnurl = new \moodle_url('/admin/settings.php', array('section' => 'local_engagement_email'));
-$editform = new edit_form(null, (array) $template);
+
+// Create the form
+$args = array(
+    'template' => $template,
+    'editoroptions' => $editoroptions
+);
+$editform = new edit_form(null, $args);
 
 if ($editform->is_cancelled()) {
     redirect($returnurl);
 } else if ($data = $editform->get_data()) {
+    // Save the files used in the body editor and store
+    $data = file_postupdate_standard_editor($data, 'body', $editoroptions, $context, 'local_engagement_email', 'body', 0);
+
     $template->status = isset($data->status) ? $data->status : 0;
     $template->subject = $data->subject;
-    $template->body = $data->body_editor['text'];
+    $template->body = $data->body;
 
     if (!empty($template->id)) {
         $DB->update_record('local_engagement_email_template', $template);
@@ -70,17 +97,6 @@ if ($editform->is_cancelled()) {
 
 echo $OUTPUT->header();
 
-$editoroptions = array(
-    'subdirs' => 0,
-    'maxbytes' => 0,
-    'maxfiles' => 0,
-    'changeformat' => 0,
-    'context' => $context,
-    'noclean' => false,
-    'trusttext' => false
-);
-
-$template = file_prepare_standard_editor($template, 'body', $editoroptions);
 $editform->set_data($template);
 $editform->display();
 
