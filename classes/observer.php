@@ -54,8 +54,16 @@ class observer {
             return;
         }
 
+        $parts = explode('\\', $eventname);
+        $eventname = end($parts);
+
         $eventdata = $event->get_data();
-        $user = \core_user::get_user($eventdata['objectid']);
+        $user = \core_user::get_user($eventdata['userid']);
+
+        // User is the object id for user_created event
+        if ($eventname == 'user_created') {
+            $user = \core_user::get_user($eventdata['objectid']);
+        }
 
         // Sender can be false when unit tests are running.
         $sender = get_admin();
@@ -63,11 +71,22 @@ class observer {
             return;
         }
 
+        // Extract the course from the event data
+        switch ($eventname) {
+            case 'course_created':
+            case 'user_enrolment_created':
+            case 'course_completed':
+                $course = get_course($eventdata['courseid']);
+                break;
+            default:
+                $course = null;
+        }
+
         if (!empty($user->email)) {
             $config = get_config('local_engagement_email');
 
             // The plugin is disabled
-            if ($config->disabled) {
+            if (!$config->engagement_email_enabled) {
                 return;
             }
 
@@ -79,7 +98,7 @@ class observer {
             }
 
             $message = new \local_engagement_email\message($template);
-            $message->send($user, $sender);
+            $message->send($user, $sender, $course);
         }
     }
 }
