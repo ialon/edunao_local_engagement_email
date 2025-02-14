@@ -48,30 +48,30 @@ $string['course_completed'] = 'Course completed';
 
 // Default templates
 $string['user_created:emailsubject'] = 'Welcome to [[sitename]]!';
-$string['user_created:emailbody'] = 'Dear [[fullname]],
-Welcome to our learning platform [[sitelink]].
-You can now create courses with AI. Create your first course now! [[genailink]]
-You can also sign up for courses by other creators, see the catalogue <a href="[[coursecatalogurl]]">here</a>.';
+$string['user_created:emailbody'] = '<p>Dear [[fullname]],</p>
+<p>Welcome to our learning platform [[sitelink]].</p>
+<p>You can now create courses with AI. Create your first course now! [[genailink]]</p>
+<p>You can also sign up for courses by other creators, see the catalogue <a href="[[coursecatalogurl]]">here</a>.</p>';
 $string['course_created:emailsubject'] = 'Course created!';
-$string['course_created:emailbody'] = 'Dear [[fullname]],
-Well done creating a new course called [[coursename]].
-Your course is ready to go! You can access it <a href="[[courseurl]]">here</a>.
-Share it with your friends/students : [[coursesharelink]]
-Create another course here: [[genailink]]';
+$string['course_created:emailbody'] = '<p>Dear [[fullname]],</p>
+<p>Well done creating a new course called [[coursename]].</p>
+<p>Your course is ready to go! You can access it <a href="[[courseurl]]">here</a>.</p>
+<p>Share it with your friends/students : [[coursesharelink]]</p>
+<p>Create another course here: [[genailink]]</p>';
 $string['user_enrolment_created:emailsubject'] = 'You are now enrolled in [[coursename]]';
-$string['user_enrolment_created:emailbody'] = 'Dear [[fullname]],
-You are now enrolled in the course [[coursename]].
-Invite your friends to join you: [[coursesharelink]]
-You can also create your own courses with AI: [[genailink]]
-Enjoy your course on [[sitelink]]!';
+$string['user_enrolment_created:emailbody'] = '<p>Dear [[fullname]],</p>
+<p>You are now enrolled in the course [[coursename]].</p>
+<p>Invite your friends to join you: [[coursesharelink]]</p>
+<p>You can also create your own courses with AI: [[genailink]]</p>
+<p>Enjoy your course on [[sitelink]]!</p>';
 $string['course_completed:emailsubject'] = 'You have completed the course [[coursename]]!';
-$string['course_completed:emailbody'] = 'Dear [[fullname]],
-You have successfully completed [[coursename]].
-[[certificate_cta]]
-If you enjoyed this course, share it with your friends: [[coursesharelink]]
-You can create your own courses with AI: [[genailink]]
-And sign up for further courses, see the catalogue <a href="[[coursecatalogurl]]">here</a>.';
-$string['get_certificate'] = 'Get your certificate <a href="[[certificateurl]]">here</a>.';
+$string['course_completed:emailbody'] = '<p>Dear [[fullname]],</p>
+<p>You have successfully completed [[coursename]].</p>
+<p>[[certificate_cta]]</p>
+<p>If you enjoyed this course, share it with your friends: [[coursesharelink]]</p>
+<p>You can create your own courses with AI: [[genailink]]</p>
+<p>And sign up for further courses, see the catalogue <a href="[[coursecatalogurl]]">here</a>.</p>';
+$string['get_certificate'] = '<p>Get your certificate <a href="[[certificateurl]]">here</a>.</p>';
 
 $string['privacy:metadata'] = 'This plugin only sends emails. It does not store any personal data.';
 
