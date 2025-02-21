@@ -98,7 +98,7 @@ class observer {
                 return;
             }
 
-            $message = new \local_engagement_email\message($template);
+            $message = new \local_engagement_email\message($template, $eventname);
             $message->send($user, $sender, $course);
         }
     }

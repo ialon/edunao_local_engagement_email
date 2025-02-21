@@ -50,6 +50,12 @@ $string['course_created'] = 'Course created';
 $string['user_enrolment_created'] = 'User enrolment created';
 $string['course_completed'] = 'Course completed';
 
+// Message handlers
+$string['messageprovider:user_created'] = 'User created';
+$string['messageprovider:course_created'] = 'Course created';
+$string['messageprovider:user_enrolment_created'] = 'User enrolment created';
+$string['messageprovider:course_completed'] = 'Course completed';
+
 // Default templates
 $string['user_created:emailsubject'] = 'Welcome to [[sitename]]!';
 $string['user_created:emailbody'] = '<p>Dear [[user:fullname]],</p>

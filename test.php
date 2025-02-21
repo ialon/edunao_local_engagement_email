@@ -33,7 +33,7 @@ require_once($CFG->libdir.'/adminlib.php');
 $type    = required_param('type', PARAM_ALPHANUMEXT);
 $lang    = required_param('language', PARAM_ALPHANUMEXT);
 
-$PAGE->set_url('/local/engagement_email/status.php');
+$PAGE->set_url('/local/engagement_email/test.php');
 $PAGE->set_context(context_system::instance());
 
 require_admin();
@@ -41,7 +41,7 @@ require_admin();
 $return = new moodle_url('/admin/settings.php', array('section'=>'local_engagement_email', 'test'=>1));
 
 $template = \local_engagement_email\template::get_template($type, $lang);
-$message = new \local_engagement_email\message($template);
+$message = new \local_engagement_email\message($template, $type);
 $message->send();
 
 redirect($return);

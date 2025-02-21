@@ -32,13 +32,17 @@ namespace local_engagement_email;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->libdir .'/filelib.php');
+require_once($CFG->libdir . '/filelib.php');
+require_once($CFG->dirroot . '/lib/messagelib.php');
+require_once($CFG->dirroot . '/user/editlib.php');
 
 class message {
     public $template;
+    public $eventname;
 
-    public function __construct($template) {
+    public function __construct($template, $eventname) {
         $this->template = $template;
+        $this->eventname = $eventname;
     }
 
     /**
@@ -86,6 +90,7 @@ class message {
         if (empty($sender)) {
             $sender = \core_user::get_noreply_user();
         }
+        $sender->maildisplay = true;
 
         if (empty($course)) {
             $course = $COURSE;
@@ -103,12 +108,20 @@ class message {
         ];
         $body = format_text($body, FORMAT_HTML, $options);
 
-        email_to_user(
-            $user,
-            $sender,
-            $this->template->subject,
-            html_to_text($body),
-            $body
-        );
+        // Use message provider to send the email.
+        $eventdata = new \core\message\message();
+        $eventdata->courseid          = $course->id;
+        $eventdata->component         = 'local_engagement_email';
+        $eventdata->name              = $this->eventname;
+        $eventdata->userfrom          = $sender;
+        $eventdata->userto            = $user;
+        $eventdata->subject           = $this->template->subject;
+        $eventdata->fullmessage       = html_to_text($body);
+        $eventdata->fullmessageformat = FORMAT_HTML;
+        $eventdata->fullmessagehtml   = $body;
+        $eventdata->smallmessage      = '';
+        $eventdata->notification      = 1;
+
+        message_send($eventdata);
     }
 }
