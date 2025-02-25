@@ -77,3 +77,69 @@ function local_engagement_email_pluginfile($course, $cm, $context, $filearea, $a
         send_file_not_found();
     }
 }
+
+/**
+ * This function adds a link to the user's profile navigation allowing them to
+ * subscribe or unsubscribe from email notifications. The link is only shown
+ * if the user is viewing their own profile and if the email message processor
+ * is enabled.
+ *
+ * @param core_user\output\myprofile\tree $tree The profile navigation tree.
+ * @param stdClass $user The user whose profile is being viewed.
+ * @param bool $iscurrentuser Whether the profile being viewed belongs to the current user.
+ * @param stdClass $course The course context (not used in this function).
+ */
+function local_engagement_email_myprofile_navigation(core_user\output\myprofile\tree $tree, $user, $iscurrentuser, $course) {
+    global $PAGE, $USER;
+
+    // Only show the category if we are viewing our own profile.
+    $user = \core_user::get_user($user->id, '*', MUST_EXIST);
+    if ($USER->id != $user->id) {
+        return;
+    }
+
+    $renderer = $PAGE->get_renderer('core', 'message');
+
+    // We only handle the email processor. This will throw an error if email is not enabled.
+    $processors = get_message_processors();
+    if (!in_array('email', array_keys($processors))) {
+        return;
+    }
+
+    // Default action is to subscribe. If just one email notification is enabled, we will show the unsubscribe link.
+    $action = 'subscribe';
+
+    // Let's get the user preferences.
+    $providers = message_get_providers_for_user($USER->id);
+    $preferences = \core_message\api::get_all_message_preferences($processors, $providers, $USER);
+    $notificationlistoutput = new \core_message\output\preferences\notification_list($processors, $providers, $preferences, $USER);
+    $context = $notificationlistoutput->export_for_template($renderer);
+
+    // Iterate over all the components and notifications to check if there is an email notification still enabled.
+    foreach ($context['components'] as $component) {
+        foreach ($component['notifications'] as $notification) {
+            foreach ($notification['processors'] as $notificationprocessor) {
+                if ($notificationprocessor['name'] === 'email'
+                    && $notificationprocessor['locked'] != 1
+                    && $notificationprocessor['enabled']) {
+                    $action = 'unsubscribe';
+                    break 3;
+                }
+            }
+        }
+    }
+
+    $url = new \moodle_url('/local/engagement_email/unsubscribe.php', ['action' => $action]);
+    $unsubscribelink = \html_writer::link($url, get_string('profile:' . $action, 'local_engagement_email'));
+
+    // Add content to the category.
+    $node = new \core_user\output\myprofile\node(
+        'contact',
+        'unsubscribe',
+        get_string('unsubscribe:email', 'local_engagement_email'),
+        null,
+        null,
+        $unsubscribelink
+    );
+    $tree->add_node($node);
+}

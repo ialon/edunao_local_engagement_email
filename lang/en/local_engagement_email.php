@@ -56,6 +56,17 @@ $string['messageprovider:course_created'] = 'Course created';
 $string['messageprovider:user_enrolment_created'] = 'User enrolment created';
 $string['messageprovider:course_completed'] = 'Course completed';
 
+// Unsubscribe from email notifications
+$string['unsubscribe:email'] = 'Email notifications';
+$string['profile:subscribe'] = 'Subscribe to all emails';
+$string['profile:unsubscribe'] = 'Unsubscribe from all emails';
+$string['confirm:subscribe'] = 'Subscribe to all email notifications?';
+$string['confirm:unsubscribe'] = 'Are you sure you want to unsubscribe from all email notifications?';
+$string['subscribe'] = 'Subscribed to all email notifications';
+$string['unsubscribe'] = 'Unsubscribed from all email notifications';
+$string['error:subscribe'] = 'Error subscribing to email notifications';
+$string['error:unsubscribe'] = 'Error unsubscribing from email notifications';
+
 // Default templates
 $string['user_created:emailsubject'] = 'Welcome to [[sitename]]!';
 $string['user_created:emailbody'] = '<p>Dear [[user:fullname]],</p>
@@ -107,7 +118,7 @@ $string['fieldname'] = 'Placeholder';
 $string['yourvalue'] = 'Preview value';
 $string['resetpass'] = 'Reset your password here';
 $string['coursecatalog'] = 'Course catalogue';
-$string['createcourselink'] = '<a href="/my/">Create course</a>';
+$string['createcourselink'] = '<a href="' . (new \moodle_url('/my/'))->out() . '">Create course</a>';
 $string['coursesharelink'] = '<a href="{$a->courseurl}">{$a->courseurl}</a>';
 
 

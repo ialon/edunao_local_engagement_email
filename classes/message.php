@@ -124,4 +124,60 @@ class message {
 
         message_send($eventdata);
     }
+
+    /**
+     * Toggles the email notifications for the current user based on the given action.
+     *
+     * @param string $action The action to perform, either 'subscribe' or 'unsubscribe'.
+     * @return bool Returns true if the operation was successful, false otherwise.
+     */
+    public static function toggle_notifications($action) {
+        global $PAGE, $USER;
+
+        $newstatus = 0;
+
+        switch ($action) {
+            case 'subscribe':
+                $newstatus = 1;
+                break;
+            case 'unsubscribe':
+                $newstatus = 0;
+                break;
+            default:
+                return false;
+        }
+
+        $renderer = $PAGE->get_renderer('core', 'message');
+
+        // We only handle the email processor. This will throw an error if email is not enabled.
+        $processors = get_message_processors();
+        if (!in_array('email', array_keys($processors))) {
+            return false;
+        }
+
+        // Let's get the user preferences.
+        $providers = message_get_providers_for_user($USER->id);
+        $preferences = \core_message\api::get_all_message_preferences($processors, $providers, $USER);
+        $notificationlistoutput = new \core_message\output\preferences\notification_list($processors, $providers, $preferences, $USER);
+        $context = $notificationlistoutput->export_for_template($renderer);
+
+        // Iterate over all the components and notifications to update the user preferences.
+        $userpref = [];
+        foreach ($context['components'] as $component) {
+            foreach ($component['notifications'] as $notification) {
+                $enabled = $newstatus ? ['email'] : [];
+                foreach ($notification['processors'] as $notificationprocessor) {
+                    if ($notificationprocessor['name'] === 'email') {
+                        continue;
+                    } else if ($notificationprocessor['enabled']) {
+                        $enabled[] = $notificationprocessor['name'];
+                    }
+                }
+                $userpref['preference_' . $notification['preferencekey'] . '_enabled'] = implode(',', $enabled);
+            }
+        }
+        useredit_update_user_preference($userpref);
+
+        return true;
+    }
 }

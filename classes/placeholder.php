@@ -273,6 +273,11 @@ class placeholder {
         $placeholders['[[adv:coursesharelink]]'] = self::get_courseshare_link();
         $placeholders['[[adv:certificate_cta]]'] = self::get_certificate_cta();
 
+        $placeholders['[[adv:unsubscribelink]]'] = \html_writer::link(
+            new \moodle_url('/local/engagement_email/unsubscribe.php'),
+            get_string('profile:unsubscribe', 'local_engagement_email')
+        );
+
         return $placeholders;
     }
 
