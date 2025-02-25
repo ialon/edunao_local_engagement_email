@@ -49,8 +49,25 @@ $string['course_created'] = 'Cours créé';
 $string['user_enrolment_created'] = 'Inscription de l\'utilisateur créée';
 $string['course_completed'] = 'Cours terminé';
 
-// Default templates
-$string['user_created:emailsubject'] = 'Bienvenue sur [[sitename]]!';
+// Gestionnaires de messages
+$string['messageprovider:user_created'] = 'Utilisateur créé';
+$string['messageprovider:course_created'] = 'Cours créé';
+$string['messageprovider:user_enrolment_created'] = 'Inscription utilisateur créée';
+$string['messageprovider:course_completed'] = 'Cours terminé';
+
+// Désabonnement des notifications par email
+$string['unsubscribe:email'] = 'Notifications par email';
+$string['profile:subscribe'] = 'S\'abonner à tous les emails';
+$string['profile:unsubscribe'] = 'Se désabonner de tous les emails';
+$string['confirm:subscribe'] = 'S\'abonner à toutes les notifications par email ?';
+$string['confirm:unsubscribe'] = 'Êtes-vous sûr de vouloir vous désabonner de toutes les notifications par email ?';
+$string['subscribe'] = 'Abonné à toutes les notifications par email';
+$string['unsubscribe'] = 'Désabonné de toutes les notifications par email';
+$string['error:subscribe'] = 'Erreur lors de l\'abonnement aux notifications par email';
+$string['error:unsubscribe'] = 'Erreur lors du désabonnement des notifications par email';
+
+// Modèles par défaut
+$string['user_created:emailsubject'] = 'Bienvenue sur [[sitename]] !';
 $string['user_created:emailbody'] = '<p>Cher [[user:fullname]],</p>
 <p>Bienvenue sur notre plateforme d\'apprentissage [[sitelink]].</p>
 <p>Vous pouvez maintenant créer des cours avec l\'IA. Créez votre premier cours maintenant! [[adv:coursecreatelink]]</p>
@@ -100,7 +117,7 @@ $string['fieldname'] = 'Emplacement';
 $string['yourvalue'] = 'Valeur de prévisualisation';
 $string['resetpass'] = 'Réinitialisez votre mot de passe ici';
 $string['coursecatalog'] = 'Catalogue de cours';
-$string['createcourselink'] = '<a href="/my/">Créer un cours</a>';
+$string['createcourselink'] = '<a href="' . (new \moodle_url('/my/'))->out() . '">Créer un cours</a>';
 $string['coursesharelink'] = '<a href="{$a->courseurl}">{$a->courseurl}</a>';
 
 
