@@ -219,6 +219,9 @@ class placeholder {
 
         $data = get_course($this->course->id);
 
+        // Add quotes to course fullname
+        $data->fullname = '"' . $data->fullname . '"';
+
         foreach ($allowedfields as $field) {
             if (!isset($data->$field)) {
                 continue;
